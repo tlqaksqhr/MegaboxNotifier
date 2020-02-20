@@ -3,16 +3,13 @@ import requests
 url = "https://megabox.co.kr/on/oh/ohb/SimpleBooking/selectBokdList.do"
 url_min_date = "https://megabox.co.kr/on/oh/ohb/SimpleBooking/selectMinBokdAbleDe.do"
 
+# date : "20200219"
 def getBookingMovieListIDByDate(date):
 	param_data = {
-		"playDe": date,# "20200219",
-		"incomeMovieNo":"",
-		"onLoad":"Y",
-		"sellChnlCd":"",
-		"incomeTheabKindCd":"",
-		"incomeBrchNo1":"",
-		"incomePlayDe":""
+		"playDe": date,
+		"onLoad":"Y"
 	}
+	
 	req = requests.post(url,json = param_data)
 	return req.json()['movieList']
 
@@ -36,35 +33,14 @@ def getMatchedMovieByAllUser(users_tag, data):
 		filtered_data = list({item['movieNo'] : item for item in filtered_data}.values())
 		search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_data})
 
-	
-
 	return search_result_list
-
-
 
 def getMovieDate(date, movie_code):
 	param_data = {
 		"arrMovieNo":movie_code,
 		"playDe":date,
 		"brchNoListCnt":0,
-		"brchNo1":"",
-		"brchNo2":"",
-		"brchNo3":"",
-		"areaCd1":"",
-		"areaCd2":"",
-		"areaCd3":"",
-		"spclbYn1":"",
-		"spclbYn2":"",
-		"spclbYn3":"",
-		"theabKindCd1":"",
-		"theabKindCd2":"",
-		"theabKindCd3":"",
-		"brchAll":"",
-		"brchSpcl":"",
-		"movieNo1":movie_code,
-		"movieNo2":"",
-		"movieNo3":"",
-		"sellChnlCd":""
+		"movieNo1":movie_code
 	}
 	req = requests.post(url_min_date,json = param_data)
 	dates = req.json()['minBokdAbleDeList']
@@ -77,7 +53,7 @@ def getMovieDate(date, movie_code):
 	return [filter_func(date_item) for date_item in dates]
 
 
-def addMovieDate(matched_list, users_tag):
+def addMovieDate(data, users_tag):
     matched_list = getMatchedMovieByAllUser(users_tag, data)
 
     merge_func = lambda item : {**item, **{'movie_dates' : getMovieDate('20200101',item['movieNo'])}}
@@ -89,4 +65,11 @@ def addMovieDate(matched_list, users_tag):
 
 
 def getSeatCount(date, movie_code):
-	pass
+	param_data = {
+		"arrMovieNo":movie_code,
+		"playDe":date,
+		"brchNoListCnt":0,
+		"movieNo1":movie_code
+	}
+	req = requests.post(url,json = param_data)
+	dates = req.json()
