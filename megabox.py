@@ -17,6 +17,31 @@ def getBookingMovieListIDByDate(date):
 	return req.json()['movieList']
 
 
+def getMatchedMovieByAllUser(users_tag, data):
+	search_result_list = []
+
+	filter_func = lambda items: {
+		item : items[item] for item in items 
+		if item == 'movieNo' or item == 'movieNm'
+	}
+
+	mapping_item = lambda tag: [
+		filter_func(item) for item in data 
+		if tag in item['movieNm']
+	][0]
+
+	for user_tag in users_tag:
+		filtered_data = [mapping_item(tag) for tag in user_tag['tags']]
+		# remove duplicate search result
+		filtered_data = list({item['movieNo'] : item for item in filtered_data}.values())
+		search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_data})
+
+	
+
+	return search_result_list
+
+
+
 def getMovieDate(date, movie_code):
 	param_data = {
 		"arrMovieNo":movie_code,
@@ -42,86 +67,26 @@ def getMovieDate(date, movie_code):
 		"sellChnlCd":""
 	}
 	req = requests.post(url_min_date,json = param_data)
-	return req.json()
-
-def getBookingMovieListByDate():
-	pass
-
-
-
-
-'''
-
-param
-
-user_tag = {
-	'user' : 'xxxx',
-	'tags' : [
-		'yyyyx',
-		'yyyyy',
-		...
-	]
-}
-
-return_value
-
-user_value = [
-	{
-		'user' : 'xxxxxx',
-		'search_result' : [
-			{'movieNo': '20004000', 'movieNm': 'yyyyy'}
-		]
-	},
-	{
-		'user' : 'xxxxxy',
-		'search_result' : [
-			{'movieNo': '20004000', 'movieNm': 'yyyyy'}
-		]
-	},
-	...
-]
-
-'''
-
-def getMatchedMovieByAllUser(users_tag, data):
-	search_result_list = []
+	dates = req.json()['minBokdAbleDeList']
 
 	filter_func = lambda items: {
 		item : items[item] for item in items 
-		if item == 'movieNo' or item == 'movieNm'
+		if item == 'playDe'
 	}
 
-	mapping_item = lambda tag: [
-		filter_func(item) for item in data 
-		if tag in item['movieNm']
-	][0]
+	return [filter_func(date_item) for date_item in dates]
 
-	for user_tag in users_tag:
-		filtered_data = [mapping_item(tag) for tag in user_tag['tags']]
-		# remove duplicate search result
-		filtered_data = list({item['movieNo'] : item for item in filtered_data}.values())
-		search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_data})
 
-	
+def addMovieDate(matched_list, users_tag):
+    matched_list = getMatchedMovieByAllUser(users_tag, data)
 
-	return search_result_list
+    merge_func = lambda item : {**item, **{'movie_dates' : getMovieDate('20200101',item['movieNo'])}}
 
-data = getBookingMovieListIDByDate("20200219")
+    for matched_item in matched_list:
+        matched_item['search_result'] = [merge_func(item) for item in matched_item['search_result']]
+    
+    return matched_list
 
-users_tag = [
-	{
-	'user' : 'Alex',
-	'tags' : [
-		'러브라이브 선샤인',
-		'First LOVELIVE',
-	]},
-	{
-	'user' : 'Kim',
-	'tags' : [
-		'First LOVELIVE',
-		'러브라이브 선샤인',
-	]},
-]
 
-matched_list = getMatchedMovieByAllUser(users_tag, data)
-print(matched_list)
+def getSeatCount(date, movie_code):
+	pass
