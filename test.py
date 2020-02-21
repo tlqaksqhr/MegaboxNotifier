@@ -19,8 +19,8 @@ users_tag = [
 	]},
 ]
 
-
-addMovieDate()
+print(megabox.addMovieDate(data, users_tag))
+print(megabox.getCinemas("20200223","20004000"))
 
 '''
 
