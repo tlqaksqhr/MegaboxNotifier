@@ -3,6 +3,10 @@ import requests
 url = "https://megabox.co.kr/on/oh/ohb/SimpleBooking/selectBokdList.do"
 url_min_date = "https://megabox.co.kr/on/oh/ohb/SimpleBooking/selectMinBokdAbleDe.do"
 
+
+# TODO : paramater 넣는 부분 builder pattern 써서 만들기..
+
+
 # date : "20200219"
 def getBookingMovieListIDByDate(date):
 	param_data = {
@@ -64,7 +68,7 @@ def addMovieDate(data, users_tag):
     return matched_list
 
 
-def getSeatCount(date, movie_code):
+def getCinemas(date, movie_code):
 	param_data = {
 		"arrMovieNo":movie_code,
 		"playDe":date,
@@ -72,4 +76,7 @@ def getSeatCount(date, movie_code):
 		"movieNo1":movie_code
 	}
 	req = requests.post(url,json = param_data)
-	dates = req.json()
+	data = req.json()['areaBrchList']
+	data = [item for item in data if item['brchFormAt'] == 'Y']
+
+	return data
