@@ -80,3 +80,27 @@ def getCinemas(date, movie_code):
 	data = [item for item in data if item['brchFormAt'] == 'Y']
 
 	return data
+
+
+def getSeatCount(date, movie_code, cinema_code):
+	param_data = {
+		"arrMovieNo" : movie_code,
+		"playDe" : date,
+		"brchNoListCnt" : 1,
+		"movieNo1": movie_code,
+		"brchNo1": cinema_code,
+		"spclbYn1" : "N"
+	}
+	req = requests.post(url,json = param_data)
+	datas = req.json()['movieFormList']
+
+	filter_func = lambda data: {
+		item : data[item] for item in data 
+		if item == 'playSchdlNo' or item == 'restSeatCnt'
+	}
+
+	hash_key =  cinema_code + "_" +  movie_code
+
+	data = {hash_key : filter_func(data) for data in datas}
+
+	return data
