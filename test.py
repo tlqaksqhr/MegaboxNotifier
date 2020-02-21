@@ -19,8 +19,9 @@ users_tag = [
 	]},
 ]
 
-print(megabox.addMovieDate(data, users_tag))
-print(megabox.getCinemas("20200223","20004000"))
+#print(megabox.addMovieDate(data, users_tag))
+#print(megabox.getCinemas("20200223","20004000"))
+print(megabox.getSeatCount("20200223","20004000","1003"))
 
 '''
 
