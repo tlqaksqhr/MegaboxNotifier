@@ -99,8 +99,11 @@ def getSeatCount(date, movie_code, cinema_code):
 		if item == 'playSchdlNo' or item == 'restSeatCnt'
 	}
 
-	hash_key =  cinema_code + "_" +  movie_code
+	hash_key = make_hashkey(cinema_code,movie_code)
 
 	data = {hash_key : filter_func(data) for data in datas}
 
 	return data
+
+def make_hashkey(cinema_code, movie_code):
+	return cinema_code + "_" +  movie_code
