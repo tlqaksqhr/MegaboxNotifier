@@ -99,6 +99,11 @@ def getSeatCount(date, movie_code, cinema_code):
 def make_hashkey(cinema_code, movie_code):
 	return cinema_code + "_" +  movie_code
 
+def getAllSearchResult(users_tag):
+	pass
+
+def addCinemaCode():
+	pass
 
 def getAllSeatCount(search_result_list):
 	filter_func = lambda data: {
@@ -106,6 +111,7 @@ def getAllSeatCount(search_result_list):
 		if item == 'playSchdlNo' or item == 'restSeatCnt'
 	}
 
-	hash_key = make_hashkey(cinema_code,movie_code)
+	for search_result in search_result_list:
+		hash_key = make_hashkey(cinema_code, movie_code)
 
-	data = {hash_key : filter_func(data) for data in datas}
+		data = {hash_key : filter_func(data) for data in datas}
