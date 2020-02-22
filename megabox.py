@@ -105,5 +105,8 @@ def getSeatCount(date, movie_code, cinema_code):
 
 	return data
 
+def getAllSeatCount(users_tag):
+	pass
+
 def make_hashkey(cinema_code, movie_code):
 	return cinema_code + "_" +  movie_code
