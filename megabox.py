@@ -94,6 +94,13 @@ def getSeatCount(date, movie_code, cinema_code):
 	req = requests.post(url,json = param_data)
 	datas = req.json()['movieFormList']
 
+	return datas
+
+def make_hashkey(cinema_code, movie_code):
+	return cinema_code + "_" +  movie_code
+
+
+def getAllSeatCount(search_result_list):
 	filter_func = lambda data: {
 		item : data[item] for item in data 
 		if item == 'playSchdlNo' or item == 'restSeatCnt'
@@ -102,11 +109,3 @@ def getSeatCount(date, movie_code, cinema_code):
 	hash_key = make_hashkey(cinema_code,movie_code)
 
 	data = {hash_key : filter_func(data) for data in datas}
-
-	return data
-
-def getAllSeatCount(users_tag):
-	pass
-
-def make_hashkey(cinema_code, movie_code):
-	return cinema_code + "_" +  movie_code
