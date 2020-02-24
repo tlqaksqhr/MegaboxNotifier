@@ -29,10 +29,10 @@ def getMatchedMovieByAllUser(users_tag, data):
 	mapping_item = lambda tag: [
 		filter_func(item) for item in data 
 		if tag in item['movieNm']
-	][0]
+	]
 
 	for user_tag in users_tag:
-		filtered_data = [mapping_item(tag) for tag in user_tag['tags']]
+		filtered_data = [mapping_item(tag) for tag in user_tag['tags']][0]
 		# remove duplicate search result
 		filtered_data = list({item['movieNo'] : item for item in filtered_data}.values())
 		search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_data})
