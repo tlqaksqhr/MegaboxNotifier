@@ -32,10 +32,12 @@ def getMatchedMovieByAllUser(users_tag, data):
 	]
 
 	for user_tag in users_tag:
-		filtered_data = [mapping_item(tag) for tag in user_tag['tags']][0]
+		filtered_data = [mapping_item(tag) for tag in user_tag['tags']]
 		# remove duplicate search result
-		filtered_data = list({item['movieNo'] : item for item in filtered_data}.values())
-		search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_data})
+
+		for filtered_item in filtered_data:
+			filtered_item = list({item['movieNo'] : item for item in filtered_item}.values())
+			search_result_list.append({'user' : user_tag['user'], 'search_result' : filtered_item})
 
 	return search_result_list
 
