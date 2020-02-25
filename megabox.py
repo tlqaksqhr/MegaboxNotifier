@@ -83,7 +83,6 @@ def getCinemas(date, movie_code):
 
 	return data
 
-
 def getSeatCount(date, movie_code, cinema_code):
 	param_data = {
 		"arrMovieNo" : movie_code,
@@ -100,12 +99,6 @@ def getSeatCount(date, movie_code, cinema_code):
 
 def make_hashkey(cinema_code, movie_code):
 	return cinema_code + "_" +  movie_code
-
-def getAllSearchResult(users_tag):
-	pass
-
-def addCinemaCode():
-	pass
 
 def getAllSeatCount(search_result_list):
 	filter_func = lambda data: {
