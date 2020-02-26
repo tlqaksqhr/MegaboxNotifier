@@ -110,3 +110,12 @@ def getAllSeatCount(search_result_list):
 		hash_key = make_hashkey(cinema_code, movie_code)
 
 		data = {hash_key : filter_func(data) for data in datas}
+
+
+def getAllCinemas(date):
+	param_data = {
+		"playDe": date,
+		"onLoad":"Y"
+	}
+	req = requests.post(url,json = param_data)
+	return req.json()
